@@ -39,6 +39,7 @@ app.on('ready', () => {
     backgroundColor: '#fafafa',
     minWidth: 375,
     minHeight: 83,
+    autoHideMenuBar: true,
   });
 
   mainWindow.loadURL(
