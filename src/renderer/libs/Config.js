@@ -69,19 +69,23 @@ class Config extends EventEmitter {
     });
   }
 
-  setIndex(index) {
+  setIndex(index, alsoSetToTracks = false) {
     if (!this.configs[index]) {
       return;
     }
     this.index = index;
     this.emit(CONFIG_EVENT.UPDATE, {index: index, configs: this.configs});
+
+    if (alsoSetToTracks) {
+      this.tracks.value = `${index}`;
+    }
   }
 
   next() {
     if (this.configs[this.index + 1]) {
-      this.setIndex(this.index + 1);
+      this.setIndex(this.index + 1, true);
     } else {
-      this.setIndex(0);
+      this.setIndex(0, true);
     }
   }
 }
