@@ -1,0 +1,68 @@
+{
+  "name": "casals",
+  "productName": "Casals",
+  "description": "music player for practicing instruments",
+  "version": "0.1.0",
+  "private": true,
+  "author": "TasukuUno",
+  "copyright": "TasukuUno",
+  "homepage": "http://tsk.uno",
+  "main": "app/backend.js",
+  "build": {
+    "appId": "uno.tsk.casals",
+    "files": [
+      "app/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "publish": null
+  },
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps",
+    "preunit": "webpack --config=build/webpack.unit.config.js --env=test --display=none",
+    "unit": "electron-mocha temp/specs.js --renderer --require source-map-support/register",
+    "pree2e": "webpack --config=build/webpack.app.config.js --env=test --display=none && webpack --config=build/webpack.e2e.config.js --env=test --display=none",
+    "e2e": "mocha temp/e2e.js --require source-map-support/register",
+    "test": "npm run unit && npm run e2e",
+    "start": "rm -rf app && node build/start.js",
+    "icns": "cd resources && iconutil -c icns icon.iconset",
+    "ico": "png-to-ico ./resources/icon.iconset/icon_512x512@2x.png > ./resources/icon.ico",
+    "release": "rm -rf ./dist/* && webpack --config=build/webpack.app.config.js --env=production && electron-builder"
+  },
+  "dependencies": {
+    "fs-jetpack": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.5",
+    "@babel/preset-env": "^7.0.0-beta.5",
+    "babel-eslint": "8.2.1",
+    "babel-loader": "^8.0.0-beta.0",
+    "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.3",
+    "chai": "^4.1.0",
+    "css-loader": "^0.28.7",
+    "electron": "2.0.5",
+    "electron-builder": "^20.15.1",
+    "electron-mocha": "^6.0.4",
+    "eslint": "4.16.0",
+    "eslint-config-google": "^0.9.1",
+    "file-loader": "^1.1.11",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.1",
+    "mocha": "^5.2.0",
+    "png-to-ico": "^2.0.0",
+    "pug": "^2.0.3",
+    "pug-loader": "^2.4.0",
+    "source-map-support": "^0.5.0",
+    "spectron": "^3.7.2",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.4",
+    "webpack-merge": "^4.1.0",
+    "webpack-node-externals": "^1.6.0"
+  }
+}

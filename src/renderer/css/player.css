@@ -1,0 +1,59 @@
+.player {
+  background: #fafafa;
+  padding-top: 4px;
+  -webkit-app-region: no-drag;
+}
+
+.player__controls {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px 0;
+}
+
+.timeRangeWrap {
+  display: flex;
+}
+
+.timeRange {
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.timeRangeWrap > * {
+  margin-left: 4px;
+}
+
+.timeRangeWrap > *:first-of-type {
+  margin: 0;
+}
+
+.timeRange::-webkit-clear-button,
+.timeRange::-webkit-inner-spin-button {
+  opacity: 1;
+}
+
+.playbackRate {
+  flex: 1;
+  margin: 0 8px;
+}
+
+.loop {
+  background: #FFF;
+  border-color: #CCC;
+  font-size: 10px;
+  outline: none;
+}
+
+.audio {
+  display: block;
+  width: 100%;
+}
+
+.audio::-webkit-media-controls-volume-slider {
+  display: none;
+}
+
+.audio::-webkit-media-controls-timeline {
+  margin: 0 4px 0 18px;
+}

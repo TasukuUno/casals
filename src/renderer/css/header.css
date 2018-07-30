@@ -1,0 +1,33 @@
+.header {
+  position: relative;
+  font-size: 10px;
+  height: 24px;
+}
+
+.version {
+  color: #AAA;
+  text-align: center;
+  flex: 1;
+  height: 24px;
+  line-height: 24px;
+}
+
+.tracksWrap {
+  align-items: center;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 8px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.isMac .tracksWrap {
+  left: auto;
+  right: 8px;
+  flex-direction: row-reverse;
+}
+
+.tracks, .add {
+  margin: 0 2px;
+}

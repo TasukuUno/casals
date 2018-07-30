@@ -1,0 +1,31 @@
+-
+  var APP_NAME = packageJSON.productName;
+  var VERSION = packageJSON.version;
+
+doctype html
+html(class=isDarwin ? 'isMac' : null)
+  head
+    meta(charset="utf-8")
+    title Casals
+    link(rel="stylesheet" href="renderer.css")
+  body
+    .container
+      .header
+        .version #{APP_NAME}@#{VERSION}
+        .tracksWrap
+          button.add#add +
+          select.tracks#tracks
+      .webviewWrap
+        webview.webview#webview
+      #player.player
+        div.player__controls
+          .timeRangeWrap
+            button#setFrom |<
+            input.timeRange#timeRangeFrom(type="time", value="00:00")
+            input.timeRange#timeRangeTo(type="time", value="00:00")
+            button#setTo >|
+          input.playbackRate#playbackRate(type="range", min="0.5", max="1.5", step="0.02", value="1", title="1")
+          input.loop#loop(type="checkbox", checked)
+        div
+          audio.audio#audio(controls)
+    script(src="renderer.js")

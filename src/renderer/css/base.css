@@ -1,0 +1,48 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  overflow: hidden;
+}
+
+div {
+  cursor: default;
+}
+
+body {
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  color: #333;
+  background: #fafafa;
+  -webkit-app-region: drag;
+}
+
+::selection {
+  background-color: rgba(255, 255, 255, .3);
+}
+
+.container {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+select {
+  background: #FFF;
+  border-color: #CCC;
+  font-size: 10px;
+  outline: none;
+}
+
+button {
+  -webkit-appearance: none;
+  height: 17px;
+  line-height: 14px;
+  border-radius: 4px;
+  padding: 0 8px;
+  background: #FFF;
+  border: 1px solid #CCC;
+  font-size: 10px;
+  outline: none;
+}
