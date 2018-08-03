@@ -32,8 +32,8 @@ yarn run release
     "name": "trackB",
     "view": [
       "./trackB1.png",
-      "./trackB2.png",
-    ]
+      "./trackB2.png"
+    ],
     "audio": "./trackB.mp3"
   },
   {
