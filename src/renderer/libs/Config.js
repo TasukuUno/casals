@@ -83,6 +83,7 @@ class Config extends EventEmitter {
 
     this.emitValues({
       trackIndex,
+      viewIndex: 0,
     });
 
     if (alsoSetToTracks) {

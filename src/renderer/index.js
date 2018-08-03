@@ -46,7 +46,7 @@ player.on(PLAYER_EVENT.ENDED, () => {
 let keyBindDisabled = false;
 window.addEventListener('focus', (e) => {
   const tagName = e.target && e.target.tagName || '';
-  keyBindDisabled = ['WEBVIEW', 'INPUT', 'SELECT', 'BUTTON'].includes(tagName);
+  keyBindDisabled = ['INPUT', 'SELECT', 'BUTTON'].includes(tagName);
 }, true);
 
 window.addEventListener('blur', (e) => {
@@ -54,7 +54,7 @@ window.addEventListener('blur', (e) => {
     return;
   }
   const tagName = e.target && e.target.tagName || '';
-  keyBindDisabled = !['WEBVIEW', 'INPUT', 'SELECT', 'BUTTON'].includes(tagName);
+  keyBindDisabled = !['INPUT', 'SELECT', 'BUTTON'].includes(tagName);
 }, true);
 
 window.addEventListener('keydown', (e) => {
