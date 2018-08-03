@@ -30,7 +30,10 @@ yarn run release
   },
   {
     "name": "trackB",
-    "view": "./trackB.png",
+    "view": [
+      "./trackB1.png",
+      "./trackB2.png",
+    ]
     "audio": "./trackB.mp3"
   },
   {
