@@ -26,6 +26,7 @@ class Player extends EventEmitter {
     });
     loop.addEventListener('click', this.setLoop.bind(this));
     playbackRate.addEventListener('change', this.setRate.bind(this));
+    playbackRate.addEventListener('dblclick', this.resetRate.bind(this));
     audio.addEventListener('timeupdate', this.timeupdate.bind(this));
     audio.addEventListener('ended', this.ended.bind(this));
   }
@@ -40,6 +41,11 @@ class Player extends EventEmitter {
   setRate() {
     this.$playbackRate.title = this.$playbackRate.value;
     this.$audio.playbackRate = this.$playbackRate.value * 1;
+  }
+
+  resetRate() {
+    this.$playbackRate.value = '1';
+    this.setRate();
   }
 
   setLoop() {
