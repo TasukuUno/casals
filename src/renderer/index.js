@@ -24,14 +24,16 @@ const player = new Player({
 });
 
 const webview = $('#webview');
+config.on(CONFIG_EVENT.UPDATE, (updates) => {
+  const currentAudio = config.getCurrentAudio();
+  const currentView = config.getCurrentView();
 
-config.on(CONFIG_EVENT.UPDATE, ({index, configs}) => {
-  if (!configs[index]) {
-    return;
+  if ('configs' in updates || 'trackIndex' in updates) {
+    currentAudio && player.setURL(currentAudio);
+    currentView && (webview.src = currentView);
   }
 
-  webview.src = configs[index].view;
-  player.setURL(configs[index].audio);
+  currentView && (webview.src = currentView);
 });
 
 player.on(PLAYER_EVENT.ENDED, () => {
@@ -41,10 +43,35 @@ player.on(PLAYER_EVENT.ENDED, () => {
   }, 200);
 });
 
+let keyBindDisabled = false;
+window.addEventListener('focus', (e) => {
+  const tagName = e.target && e.target.tagName || '';
+  keyBindDisabled = ['WEBVIEW', 'INPUT', 'SELECT', 'BUTTON'].includes(tagName);
+}, true);
+
+window.addEventListener('blur', (e) => {
+  if (!keyBindDisabled) {
+    return;
+  }
+  const tagName = e.target && e.target.tagName || '';
+  keyBindDisabled = !['WEBVIEW', 'INPUT', 'SELECT', 'BUTTON'].includes(tagName);
+}, true);
+
 window.addEventListener('keydown', (e) => {
   const {code} = e;
-  if (code === 'Space') {
-    player.toggle();
+  if (keyBindDisabled) {
+    return;
+  }
+  switch (code) {
+    case 'Space':
+      player.toggle();
+      break;
+    case 'ArrowLeft':
+      config.nextView(true);
+      break;
+    case 'ArrowRight':
+      config.nextView(false);
+      break;
   }
 }, true);
 

@@ -1,6 +1,5 @@
 import {EventEmitter} from 'events';
 import path from 'path';
-window.path = path;
 
 export const CONFIG_EVENT = {
   UPDATE: 'Config.UPDATE',
@@ -9,11 +8,13 @@ export const CONFIG_EVENT = {
 class Config extends EventEmitter {
   constructor({tracks, button}) {
     super();
-    this.tracks = tracks;
-    this.index = 0;
+    this.$tracks = tracks;
+    this.trackIndex = 0;
+    this.viewIndex = 0;
+    this.configs = [];
     setTimeout(() => this.load(), 1);
     button.addEventListener('click', this.select.bind(this));
-    tracks.addEventListener('change', () => this.setIndex(tracks.value * 1));
+    tracks.addEventListener('change', () => this.setTrackIndex(tracks.value * 1));
   }
 
   select() {
@@ -38,55 +39,118 @@ class Config extends EventEmitter {
 
   update(configs, file) {
     if (Array.isArray(configs)) {
-      const base = path.parse(file.path).dir;
+      const base = file && path.parse(file.path).dir;
       configs = configs.map((config) => {
+        let view = Array.isArray(config.view) ? config.view : [config.view];
+        view = view.map((item) => base && item.indexOf('http') === 0 ? item : path.resolve(base, item));
+        const audio = base ? path.resolve(base, config.audio) : config.audio;
         return {
           name: config.name,
-          view: config.view.indexOf('http') === 0 ? config.view : path.resolve(base, config.view),
-          audio: path.resolve(base, config.audio),
+          view,
+          audio,
         };
       });
       this.configs = configs;
       localStorage.setItem('configs', JSON.stringify(configs));
-      this.emit(CONFIG_EVENT.UPDATE, {index: 0, configs});
+      this.emitValues({
+        configs,
+        trackIndex: 0,
+        viewIndex: 0,
+      });
       this.options(configs);
     }
   }
 
   load() {
     const configs = this.configs = JSON.parse(localStorage.getItem('configs')) || [];
-    this.emit(CONFIG_EVENT.UPDATE, {index: 0, configs});
-    this.options(configs);
+    this.update(configs);
   }
 
   options(configs) {
-    this.tracks.innerHTML = '';
+    this.$tracks.innerHTML = '';
     configs.forEach((config, index) => {
       const option = document.createElement('option');
       option.value = index;
       option.textContent = config.name;
-      this.tracks.appendChild(option);
+      this.$tracks.appendChild(option);
     });
   }
 
-  setIndex(index, alsoSetToTracks = false) {
-    if (!this.configs[index]) {
+  setTrackIndex(trackIndex, alsoSetToTracks = false) {
+    if (!this.configs[trackIndex]) {
       return;
     }
-    this.index = index;
-    this.emit(CONFIG_EVENT.UPDATE, {index: index, configs: this.configs});
+
+    this.emitValues({
+      trackIndex,
+    });
 
     if (alsoSetToTracks) {
-      this.tracks.value = `${index}`;
+      this.$tracks.value = `${trackIndex}`;
     }
   }
 
-  next() {
-    if (this.configs[this.index + 1]) {
-      this.setIndex(this.index + 1, true);
-    } else {
-      this.setIndex(0, true);
+  setViewIndex(viewIndex) {
+    const config = this.configs[this.trackIndex];
+    if (!config || config[viewIndex]) {
+      return;
     }
+
+    this.emitValues({
+      viewIndex,
+    });
+  }
+
+  next() {
+    if (this.configs.length < 2) {
+      return;
+    }
+    {if (this.configs[this.trackIndex + 1]) {
+      this.setTrackIndex(this.trackIndex + 1, true);
+    } else {
+      this.setTrackIndex(0, true);
+    }}
+  }
+
+  nextView(back = false) {
+    const config = this.configs[this.trackIndex];
+    if (!config || config.view.length < 2) {
+      return;
+    }
+
+    const direction = back ? -1 : 1;
+    if (config.view[this.viewIndex + direction]) {
+      this.setViewIndex(this.viewIndex + direction);
+    } else if (back) {
+      this.setViewIndex(0);
+    } else {
+      this.setViewIndex(0);
+    }
+  }
+
+  emitValues(updated) {
+    Object.keys(updated).forEach((key) => {
+      this[key] = updated[key];
+    });
+
+    this.emit(CONFIG_EVENT.UPDATE, Object.assign({}, updated));
+  }
+
+  getCurrentView() {
+    return (
+      this.configs &&
+      this.configs[this.trackIndex] &&
+      this.configs[this.trackIndex].view &&
+      this.configs[this.trackIndex].view[this.viewIndex]
+    ) || null;
+  }
+
+  getCurrentAudio() {
+    return (
+      this.configs &&
+      this.configs[this.trackIndex] &&
+      this.configs[this.trackIndex].audio
+    ) || null;
   }
 }
 
