@@ -35,6 +35,7 @@ class Config extends EventEmitter {
       fileReader.readAsText(file);
     });
     input.click();
+    this.blurElements();
   }
 
   update(configs, file) {
@@ -89,6 +90,8 @@ class Config extends EventEmitter {
     if (alsoSetToTracks) {
       this.$tracks.value = `${trackIndex}`;
     }
+
+    this.blurElements();
   }
 
   setViewIndex(viewIndex) {
@@ -152,6 +155,13 @@ class Config extends EventEmitter {
       this.configs[this.trackIndex] &&
       this.configs[this.trackIndex].audio
     ) || null;
+  }
+
+  blurElements() {
+    const blurElem = document.querySelector('*:focus');
+    if (blurElem && blurElem.blur) {
+      blurElem.blur();
+    }
   }
 }
 

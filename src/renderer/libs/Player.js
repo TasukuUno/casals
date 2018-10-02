@@ -41,15 +41,18 @@ class Player extends EventEmitter {
   setRate() {
     this.$playbackRate.title = this.$playbackRate.value;
     this.$audio.playbackRate = this.$playbackRate.value * 1;
+    this.blurElements();
   }
 
   resetRate() {
     this.$playbackRate.value = '1';
     this.setRate();
+    this.blurElements();
   }
 
   setLoop() {
     this.$audio.loop = !!this.$loop.checked;
+    this.blurElements();
   }
 
   setRange() {
@@ -63,6 +66,7 @@ class Player extends EventEmitter {
       from: values[0] || 0,
       to: values[1] || 0,
     };
+    this.blurElements();
   }
 
   setRangeFromBtn(isFrom) {
@@ -74,6 +78,7 @@ class Player extends EventEmitter {
     const target = isFrom ? this.$timeRangeFrom : this.$timeRangeTo;
     target.value = value;
     this.setRange();
+    this.blurElements();
   }
 
   timeupdate() {
@@ -103,6 +108,13 @@ class Player extends EventEmitter {
       this.play();
     } else {
       this.pause();
+    }
+  }
+
+  blurElements() {
+    const blurElem = document.querySelector('*:focus');
+    if (blurElem && blurElem.blur) {
+      blurElem.blur();
     }
   }
 }
